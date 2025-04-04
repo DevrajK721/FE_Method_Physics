@@ -1,36 +1,25 @@
-##
-#  CMake script
-##
+cmake_minimum_required(VERSION 3.10)
+project(main1)
 
-# Set the name of the project and target:
-SET(TARGET "main1")
+# Explicitly set the C++ standard
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Declare all source files the target consists of:
-SET(TARGET_SRC
-  ${TARGET}.cc
-  # You can specify additional files here!
-  )
-
-# Usually, you will not need to modify anything beyond this point...
-
-CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
-
-FIND_PACKAGE(deal.II 8.0 QUIET
-  HINTS ${deal.II_DIR} ${DEAL_II_DIR} ../ ../../ $ENV{DEAL_II_DIR}
-  )
-IF(NOT ${deal.II_FOUND})
-  MESSAGE(FATAL_ERROR "\n"
-    "*** Could not locate deal.II. ***\n\n"
-    "You may want to either pass a flag -DDEAL_II_DIR=/path/to/deal.II to cmake\n"
-    "or set an environment variable \"DEAL_II_DIR\" that contains this path."
-    )
-ENDIF()
-
+# Find dependencies
+find_package(deal.II 8.0 REQUIRED
+  HINTS ${deal.II_DIR} ${DEAL_II_DIR} ../ ../../ $ENV{DEAL_II_DIR})
 find_package(fmt CONFIG REQUIRED)
-target_link_libraries(${TARGET} PRIVATE fmt::fmt)
 
-DEAL_II_INITIALIZE_CACHED_VARIABLES()
-PROJECT(${TARGET})
-DEAL_II_INVOKE_AUTOPILOT()
-ADD_EXECUTABLE(${TARGET} ${TARGET_SRC})
-DEAL_II_SETUP_TARGET(${TARGET})
+# Initialize deal.II variables
+deal_II_initialize_cached_variables()
+
+# Define source files (adjust extension as needed)
+set(TARGET_SRC main1.cpp)  # or use main1.cpp if that's your source file
+
+# Create the executable target
+add_executable(main1 ${TARGET_SRC})
+target_link_libraries(main1 fmt::fmt)
+
+# Setup deal.II target settings
+# deal_II_invoke_autopilot()
+deal_II_setup_target(main1)
